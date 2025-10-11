@@ -1,0 +1,4 @@
+repository "Rogue like de programação/Rogue like de programação@4674103997172@cloud"
+  path "/"
+    br "/main"
+    co "/main"
