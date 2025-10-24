@@ -11,8 +11,8 @@ public class NullVariable : VariableCard
     void Start()
     {
         N1 = 25;
-        N2 = 2;
-        N3 = 2;
-        ChangeDescription();
+        N2 = 1;
+        N3 = 1;
+        StartVariable();
     }
 }

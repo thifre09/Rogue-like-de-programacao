@@ -16,6 +16,18 @@ PrefabInstance:
       propertyPath: m_Color.g
       value: 0.57829964
       objectReference: {fileID: 0}
+    - target: {fileID: 4409999892664635710, guid: aa6b802dc18413f459eaba57df23b385, type: 3}
+      propertyPath: m_Color.b
+      value: 0.15566039
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409999892664635710, guid: aa6b802dc18413f459eaba57df23b385, type: 3}
+      propertyPath: m_Color.g
+      value: 0.54928565
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409999892664635710, guid: aa6b802dc18413f459eaba57df23b385, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5360600752980064298, guid: aa6b802dc18413f459eaba57df23b385, type: 3}
       propertyPath: m_text
       value: BOOL
@@ -129,16 +141,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9316795d3e329848b4a3b01054a6645, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BooleanVariable
-  title: {fileID: 8262029290606183316}
   value: 0
---- !u!114 &8262029290606183316 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1824728918007022972, guid: aa6b802dc18413f459eaba57df23b385, type: 3}
-  m_PrefabInstance: {fileID: 7780569333461501672}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI

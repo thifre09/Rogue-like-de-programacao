@@ -13,8 +13,8 @@ public class FloatVariable : VariableCard
     {
         value = GameController.instance.seed.RandomInt(1, 9);
         N1 = (int)Mathf.Ceil(value);
-        N2 = 2;
-        N3 = 1;
-        ChangeDescription();
+        N2 = 1;
+        N3 = 0;
+        StartVariable();
     }
 }

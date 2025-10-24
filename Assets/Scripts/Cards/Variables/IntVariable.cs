@@ -13,8 +13,8 @@ public class IntVariable : VariableCard
     {
         value = GameController.instance.seed.RandomInt(1, 9);
         N1 = value;
-        N2 = 1;
-        N3 = 2;
-        ChangeDescription();
+        N2 = 0;
+        N3 = 1;
+        StartVariable();
     }
 }

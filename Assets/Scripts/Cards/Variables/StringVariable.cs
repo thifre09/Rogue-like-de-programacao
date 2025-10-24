@@ -17,8 +17,8 @@ public class StringVariable : VariableCard
             value += (char)GameController.instance.seed.RandomInt(97, 123);
         }
         N1 = value.Length;
-        N2 = 1;
-        N3 = 2;
-        ChangeDescription();
+        N2 = 0;
+        N3 = 1;
+        StartVariable();
     }
 }

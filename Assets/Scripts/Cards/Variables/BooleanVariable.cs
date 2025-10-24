@@ -13,8 +13,8 @@ public class BooleanVariable : VariableCard
     {
         value = GameController.instance.seed.RandomInt(0, 1) == 1;
         N1 = 10;
-        N2 = value ? 2 : 3;
-        N3 = value ? 3 : 2;
-        ChangeDescription();
+        N2 = value ? 1 : 2;
+        N3 = value ? 2 : 1;
+        StartVariable();
     }
 }

@@ -11,40 +11,31 @@ public class Card3DEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerExit(PointerEventData eventData) => isHovered = false;
     void Update()
     {
+
         if (isHovered)
         {
-            Vector3 mousePos = Mouse.current.position.ReadValue();
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                gameObject.GetComponent<RectTransform>(),
-                mousePos,
-                null, // para Screen Space Overlay
-                out Vector2 localMousePos
-            );
+            Vector2 mousePos = Mouse.current.position.ReadValue();
 
-            Vector3 localMousePos3D = new Vector3(localMousePos.x, localMousePos.y, 1000f);
-            Debug.Log(localMousePos3D.x + " , " + localMousePos3D.y + " , " + localMousePos3D.z);
 
-            direction = (localMousePos3D - transform.localPosition).normalized;
+            Vector3 mousePos3D = new(mousePos.x, mousePos.y, 300f);
+            Debug.Log(mousePos3D.x + " , " + mousePos3D.y + " , " + mousePos3D.z);
 
-            transform.rotation = Quaternion.LookRotation(direction, transform.up);
+            direction = (mousePos3D - transform.position).normalized;
+
+            transform.rotation = Quaternion.LookRotation(new Vector3(-direction.x, -direction.y, direction.z), new Vector3(0f, 1f, 0f));
         }
         else
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * 5f);   
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * 5f);
         }
-    }
 
-    void OnDrawGizmos()
-    {
-        if (isHovered)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Gizmos.color = Color.red;
-            Vector3 start = transform.position;
-            Vector3 end = start + direction * 100f; // Multiply by some length to make it visible
-            Gizmos.DrawLine(start, end);
-            // Draw an arrow head
-            Gizmos.DrawWireSphere(end, 5f);
+            Time.timeScale = 0f;
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Time.timeScale = 1f;
         }
     }
-
 }

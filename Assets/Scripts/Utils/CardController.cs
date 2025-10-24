@@ -4,10 +4,12 @@ using UnityEngine;
 public class CardController : MonoBehaviour
 {
     public static CardController instance;
+    public int maxHandCards = 6;
+    public int maxCardsPlayable = 4;
     public List<GameObject> functionCards = new();
     public List<GameObject> deckCards = new();
     public List<GameObject> handCards = new();
-    public int maxHandCards = 6;
+    public List<GameObject> selectedCards = new();
     public GameObject cimaObj;
     public GameObject centroObj;
     public GameObject baixoObj;
@@ -42,7 +44,7 @@ public class CardController : MonoBehaviour
             deckCards.Add(stringCard);
         }
 
-        DrawCard(6);
+        DrawCard(maxHandCards);
     }
 
     void DrawCard(int amount = 1)

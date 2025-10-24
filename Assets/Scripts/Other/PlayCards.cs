@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class PlayCards : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public GameObject playedCardsParent;
+    public void PlaySelectedCards()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        foreach (GameObject card in CardController.instance.selectedCards)
+        {
+            
+        }
+        CardController.instance.selectedCards.Clear();
     }
 }
