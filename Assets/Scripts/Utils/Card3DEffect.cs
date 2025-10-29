@@ -18,7 +18,6 @@ public class Card3DEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
 
             Vector3 mousePos3D = new(mousePos.x, mousePos.y, 300f);
-            Debug.Log(mousePos3D.x + " , " + mousePos3D.y + " , " + mousePos3D.z);
 
             direction = (mousePos3D - transform.position).normalized;
 

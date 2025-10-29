@@ -5,16 +5,32 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
+    public static float timeScale = 1f;
+    public float time = 1f;
     public RandomSeed seed;
     void Awake()
     {
         instance = this;
         seed = new RandomSeed(42);
     }
-    public string FormatNumber(double number)
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 1f;
+        }
+
+        timeScale = time;
+    }
+
+    public static string FormatNumber(double number)
     {
         if (number == 0)
             return "0";
+
+        if (number < 100000)
+            return number.ToString();
 
         // Calcula o expoente (base 10)
         int exponent = (int)Math.Floor(Math.Log10(Math.Abs(number)));
@@ -28,7 +44,7 @@ public class GameController : MonoBehaviour
 
     public Coroutine Wait(float seconds, Action action)
     {
-        return StartCoroutine(WaitRoutine(seconds, action));
+        return StartCoroutine(WaitRoutine(seconds * timeScale, action));
     }
 
     private IEnumerator WaitRoutine(float seconds, Action action)
@@ -46,5 +62,24 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(seconds);
         action?.Invoke();
+    }
+
+    public static IEnumerator FreezeCam()
+    {
+        //yield return null;
+        Camera.main.clearFlags = CameraClearFlags.Nothing;
+        yield return null;
+        Camera.main.cullingMask = 0;
+    }
+
+    public static void UnfreezeCam()
+    {
+        Camera.main.cullingMask = -1;
+        Camera.main.clearFlags = CameraClearFlags.SolidColor;
+    }
+
+    internal static string FormatNumber(string n1)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -14,7 +14,7 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
     private bool isHovered;
     private Vector2 originalPosition;
     private bool firstTime = true;
-    RectTransform rectTransform;
+    private RectTransform rectTransform;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -63,7 +63,6 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
         if (CardController.instance.selectedCards.Contains(gameObject))
         {
             CardController.instance.selectedCards.Remove(gameObject);
-            LeanTween.cancel(gameObject); // Cancela qualquer animação anterior
             LeanTween.moveY(rectTransform, originalPosition.y, 0.5f).setEase(LeanTweenType.easeOutSine);
             transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = "";
             foreach (GameObject card in CardController.instance.selectedCards)
@@ -72,10 +71,11 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
                 card.transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = (index + 1).ToString();
             }
         }
-        else if (!CardController.instance.selectedCards.Contains(gameObject) && CardController.instance.selectedCards.Count < CardController.instance.maxCardsPlayable)
+        else if (!CardController.instance.selectedCards.Contains(gameObject) 
+        && CardController.instance.selectedCards.Count < CardController.instance.maxCardsPlayable 
+        && CardController.instance.handCards.Contains(gameObject))
         {
             CardController.instance.selectedCards.Add(gameObject);
-            LeanTween.cancel(gameObject); // Cancela qualquer animação anterior
             LeanTween.moveY(rectTransform, originalPosition.y + 50f, 0.5f).setEase(LeanTweenType.easeOutSine);
             transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = CardController.instance.selectedCards.Count.ToString();
         }
@@ -83,7 +83,7 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void ShowDescription()
     {
-        if (isHovered)
+        if (isHovered && CardController.instance.handCards.Contains(gameObject))
         {
             transform.GetChild(1).gameObject.SetActive(true);
 
@@ -93,5 +93,11 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
             transform.GetChild(1).gameObject.SetActive(false);
 
         }
+    }
+
+    public void ODrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, 1000f*Vector3.one);
     }
 }

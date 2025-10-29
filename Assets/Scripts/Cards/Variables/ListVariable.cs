@@ -36,8 +36,8 @@ public class ListVariable : VariableCard
             }
         }
         N1 = value.Count;
-        N2 = 0;
-        N3 = 1;
+        N2 = 1;
+        N3 = 0;
         StartVariable();
     }
 }

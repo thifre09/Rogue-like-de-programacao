@@ -10,7 +10,7 @@ public class NullVariable : VariableCard
 
     void Start()
     {
-        N1 = 25;
+        N1 = 20;
         N2 = 1;
         N3 = 1;
         StartVariable();

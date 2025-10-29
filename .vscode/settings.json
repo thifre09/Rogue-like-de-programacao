@@ -71,6 +71,7 @@
         "Behaviour",
         "Lerp",
         "Mathf",
+        "Rebuilder",
         "Slerp"
     ]
 }
