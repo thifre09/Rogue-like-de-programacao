@@ -32,6 +32,7 @@ public class ScoreController : MonoBehaviour
 
     public static void UpdateTexts()
     {
+        scoreText.text = GameController.FormatNumber(score);
         N1Text.text = GameController.FormatNumber(N1);
         N2Text.text = GameController.FormatNumber(N2);
         N3Text.text = GameController.FormatNumber(N3);

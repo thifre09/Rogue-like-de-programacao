@@ -4,15 +4,20 @@ using UnityEngine;
 public class CardController : MonoBehaviour
 {
     public static CardController instance;
-    public int maxHandCards = 6;
-    public int maxCardsPlayable = 4;
+    public static int maxHandCards = 6;
+    public static int maxCardsPlayable = 4;
     public List<GameObject> functionCards = new();
     public List<GameObject> deckCards = new();
+    public List<GameObject> availableCards = new();
     public List<GameObject> handCards = new();
     public List<GameObject> selectedCards = new();
+
+    [Header("Referências de UI")]
     public GameObject cimaObj;
     public GameObject centroObj;
     public GameObject baixoObj;
+    public GameObject variableCardsContainer;
+    public GameObject discartedCardsContainer;
     void Awake()
     {
         instance = this;
@@ -22,12 +27,12 @@ public class CardController : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            GameObject boolCard = Instantiate(Prefabs.instance.booleanVariableCard, baixoObj.transform);
-            GameObject floatCard = Instantiate(Prefabs.instance.floatVariableCard, baixoObj.transform);
-            GameObject intCard = Instantiate(Prefabs.instance.intVariableCard, baixoObj.transform);
-            GameObject listCard = Instantiate(Prefabs.instance.listVariableCard, baixoObj.transform);
-            GameObject nullCard = Instantiate(Prefabs.instance.nullVariableCard, baixoObj.transform);
-            GameObject stringCard = Instantiate(Prefabs.instance.stringVariableCard, baixoObj.transform);
+            GameObject boolCard = Instantiate(Prefabs.instance.booleanVariableCard, variableCardsContainer.transform);
+            GameObject floatCard = Instantiate(Prefabs.instance.floatVariableCard, variableCardsContainer.transform);
+            GameObject intCard = Instantiate(Prefabs.instance.intVariableCard, variableCardsContainer.transform);
+            GameObject listCard = Instantiate(Prefabs.instance.listVariableCard, variableCardsContainer.transform);
+            GameObject nullCard = Instantiate(Prefabs.instance.nullVariableCard, variableCardsContainer.transform);
+            GameObject stringCard = Instantiate(Prefabs.instance.stringVariableCard, variableCardsContainer.transform);
 
             boolCard.SetActive(false);
             floatCard.SetActive(false);
@@ -42,19 +47,25 @@ public class CardController : MonoBehaviour
             deckCards.Add(listCard);
             deckCards.Add(nullCard);
             deckCards.Add(stringCard);
+            availableCards.Add(boolCard);
+            availableCards.Add(floatCard);
+            availableCards.Add(intCard);
+            availableCards.Add(listCard);
+            availableCards.Add(nullCard);
+            availableCards.Add(stringCard);
         }
 
         DrawCard(maxHandCards);
     }
 
-    void DrawCard(int amount = 1)
+    public void DrawCard(int amount = 1)
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject chosenCard = deckCards[GameController.instance.seed.RandomInt(0, deckCards.Count - 1)];
+            GameObject chosenCard = availableCards[GameController.instance.seed.RandomInt(0, availableCards.Count - 1)];
             while (handCards.Contains(chosenCard))
             {
-                chosenCard = deckCards[GameController.instance.seed.RandomInt(0, deckCards.Count - 1)];
+                chosenCard = availableCards[GameController.instance.seed.RandomInt(0, availableCards.Count - 1)];
             }
             handCards.Add(chosenCard);
             chosenCard.SetActive(true);

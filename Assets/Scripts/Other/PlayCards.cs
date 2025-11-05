@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor.ShaderGraph.Legacy;
@@ -11,6 +12,14 @@ public class PlayCards : MonoBehaviour
     private readonly List<Vector2> handCardsPosition = new();
     public void PlaySelectedCards()
     {
+        MatchController.attempts--;
+        for(int i = 0; i < CardController.instance.selectedCards.Count; i++)
+        {
+            GameObject card = CardController.instance.selectedCards[i];
+            LeanTween.cancel(card, true);
+            CardController.instance.availableCards.Remove(card);
+        }
+        gameObject.GetComponent<Button>().interactable = false;
         for (int i = 0; i < CardController.instance.selectedCards.Count; i++)
         {
             GameObject card = CardController.instance.selectedCards[i];
@@ -26,20 +35,18 @@ public class PlayCards : MonoBehaviour
             });
 
             CardController.instance.handCards.Remove(card);
-            card.transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = "";
+            card.transform.GetChild(VariableCard.positionGameObjectIndex).gameObject.GetComponent<TMP_Text>().text = "";
             card.transform.SetParent(playedCardsParent.transform);
-
         }
 
         foreach (GameObject card in CardController.instance.handCards)
         {
             handCardsPosition.Add(card.GetComponent<RectTransform>().position);
+            card.GetComponent<VariableCard>().canShowDescription = false;
         }
 
-        StartCoroutine(GameController.FreezeCam());
         GameController.instance.Wait(0f, () =>
         {
-            GameController.UnfreezeCam();
             for (int i = 0; i < CardController.instance.selectedCards.Count; i++)
             {
                 GameObject card = CardController.instance.selectedCards[i];
@@ -70,59 +77,108 @@ public class PlayCards : MonoBehaviour
 
     void Score()
     {
-        // Get all VariableCard components from children
         for (int i = 0; i < playedCardsParent.transform.childCount; i++)
         {
-            Transform cardTransform = playedCardsParent.transform.GetChild(i);
-            GameController.instance.Wait(3 * ((0.3f * GameController.timeScale) + 0.4f) * i, () =>
-            {
-                if (cardTransform.TryGetComponent<VariableCard>(out var variableCard))
-                {
-                    GameObject card = cardTransform.GetChild(3).gameObject;
-                    Debug.Log(cardTransform.name);
-                    Debug.Log(card.name);
-                    card.SetActive(true);
+            // Captura local para evitar bug de referência dentro das lambdas
+            Transform currentCard = playedCardsParent.transform.GetChild(i);
 
-                    card.GetComponent<TMP_Text>().color = new Color32(255, 40, 40, 255);
-                    card.GetComponent<TMP_Text>().text = GameController.FormatNumber(cardTransform.GetComponent<VariableCard>().N1);
-                    LeanTween.moveY(card, card.transform.position.y, 0.3f * GameController.timeScale)
-                    .setFrom(card.transform.position.y - 100f).setEaseOutCubic();
-                    GameController.instance.Wait(0.4f, () =>
+            // Delay baseado no índice da carta
+            float delay = 3 * 0.5f * i;
+
+            GameController.instance.Wait(delay, () =>
+            {
+                if (currentCard.TryGetComponent<VariableCard>(out var variableCard))
+                {
+                    LeanTween.scale(currentCard.gameObject, currentCard.localScale * 1.1f, 0.2f).setEaseInBack();
+
+                    GameObject scoreTextObject = currentCard.GetChild(VariableCard.scoreGameObjectIndex).gameObject;
+                    TMP_Text text = scoreTextObject.GetComponent<TMP_Text>();
+
+                    scoreTextObject.SetActive(true);
+
+                    // Função local auxiliar para animar e atualizar pontuação
+                    void AnimateStep(Color32 color, float value, Action onComplete)
+                    {
+                        text.color = color;
+                        text.text = GameController.FormatNumber(value);
+                        LeanTween.moveY(scoreTextObject, scoreTextObject.transform.position.y, 0.3f)
+                            .setFrom(scoreTextObject.transform.position.y - 100f)
+                            .setEaseOutCubic()
+                            .setOnComplete(onComplete);
+                    }
+
+                    // --- Sequência de animações ---
+                    AnimateStep(new Color32(255, 40, 40, 255), variableCard.N1, () =>
                     {
                         ScoreController.N1 += variableCard.N1;
                         ScoreController.UpdateN1();
-                    });
 
-                    GameController.instance.Wait((0.3f * GameController.timeScale) + 0.4f, () =>
-                    {
-                        card.GetComponent<TMP_Text>().color = new Color32(40, 255, 40, 255);
-                        card.GetComponent<TMP_Text>().text = GameController.FormatNumber(cardTransform.GetComponent<VariableCard>().N2);
-                        LeanTween.moveY(card, card.transform.position.y, 0.3f * GameController.timeScale)
-                        .setFrom(card.transform.position.y - 100f).setEaseOutCubic();
-                        GameController.instance.Wait(0.4f, () =>
+                        GameController.instance.Wait(0.1f, () =>
                         {
-                            ScoreController.N2 += variableCard.N2;
-                            ScoreController.UpdateN2();
-                        });
-                    });
+                            AnimateStep(new Color32(40, 255, 40, 255), variableCard.N2, () =>
+                            {
+                                ScoreController.N2 += variableCard.N2;
+                                ScoreController.UpdateN2();
 
-                    GameController.instance.Wait(2 * ((0.3f * GameController.timeScale) + 0.4f), () =>
-                    {
-                        card.GetComponent<TMP_Text>().color = new Color32(40, 40, 255, 255);
-                        card.GetComponent<TMP_Text>().text = GameController.FormatNumber(cardTransform.GetComponent<VariableCard>().N3);
-                        LeanTween.moveY(card, card.transform.position.y, 0.3f * GameController.timeScale)
-                        .setFrom(card.transform.position.y - 100f).setEaseOutCubic();
-                        GameController.instance.Wait(0.4f, () =>
-                        {
-                            ScoreController.N3 += variableCard.N3;
-                            ScoreController.UpdateN3();
-                            card.SetActive(false);
+                                GameController.instance.Wait(0.1f, () =>
+                                {
+                                    AnimateStep(new Color32(40, 40, 255, 255), variableCard.N3, () =>
+                                    {
+                                        ScoreController.N3 += variableCard.N3;
+                                        ScoreController.UpdateN3();
+                                        ScoreController.UpdateTexts();
+
+                                        GameController.instance.Wait(0.2f, () =>
+                                        {
+                                            scoreTextObject.SetActive(false);
+                                            LeanTween.scale(currentCard.gameObject, currentCard.localScale / 1.1f, 0.2f).setEaseInBack();
+                                        });
+                                    });
+                                });
+                            });
                         });
-                        ScoreController.UpdateTexts();
                     });
                 }
             });
+        }
 
+        GameController.instance.Wait(3 * 0.5f * playedCardsParent.transform.childCount, () =>
+        {
+            ScoreController.CaulculateScore();
+            ScoreController.UpdateScoreText();
+            GameController.instance.Wait(0.5f, () =>
+            {
+                int childCount = playedCardsParent.transform.childCount;
+                for (int i = 0; i < childCount; i++)
+                {
+                    Transform cardTransform = playedCardsParent.transform.GetChild(0);
+                    LeanTween.scale(cardTransform.gameObject, Vector3.zero, 0.5f).setEaseInBack();
+                    cardTransform.SetParent(CardController.instance.discartedCardsContainer.transform);
+                }
+                GameController.instance.Wait(0.8f,() =>
+                {
+                    VerifyWin();
+                });
+            });
+            
+        });
+    }
+
+    void VerifyWin()
+    {
+        ScoreController.N1 = 0;
+        ScoreController.N2 = 1;
+        ScoreController.N2 = 1;
+        if (ScoreController.score >= MatchController.problemScoreNeeded)
+        {
+            Debug.Log("win");
+        }
+        else
+        {
+            CardController.instance.DrawCard(CardController.maxHandCards - CardController.instance.handCards.Count);
+            gameObject.GetComponent<Button>().interactable = true;
         }
     }
+
 }
+

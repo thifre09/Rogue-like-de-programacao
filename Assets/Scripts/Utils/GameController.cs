@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -62,24 +63,5 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(seconds);
         action?.Invoke();
-    }
-
-    public static IEnumerator FreezeCam()
-    {
-        //yield return null;
-        Camera.main.clearFlags = CameraClearFlags.Nothing;
-        yield return null;
-        Camera.main.cullingMask = 0;
-    }
-
-    public static void UnfreezeCam()
-    {
-        Camera.main.cullingMask = -1;
-        Camera.main.clearFlags = CameraClearFlags.SolidColor;
-    }
-
-    internal static string FormatNumber(string n1)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -12,9 +12,14 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
     public abstract int N3 { get; set; }
 
     private bool isHovered;
-    private Vector2 originalPosition;
     private bool firstTime = true;
     private RectTransform rectTransform;
+    public bool canShowDescription = true;
+    public Vector2 originalPosition;
+    public static int scoreGameObjectIndex = 0;
+    public static int cardGameObjectIndex = 1;
+    public static int descriptionGameObjectIndex = 2;
+    public static int positionGameObjectIndex = 3;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -41,21 +46,21 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         rectTransform = GetComponent<RectTransform>();
 
-        TMP_Text title = transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<TMP_Text>();
+        TMP_Text title = transform.GetChild(descriptionGameObjectIndex).GetChild(0).GetChild(0).GetComponent<TMP_Text>();
         title.text = Name;
 
-        TMP_Text valueN1 = transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>();
+        TMP_Text valueN1 = transform.GetChild(descriptionGameObjectIndex).GetChild(1).GetComponent<TMP_Text>();
         valueN1.text = "N1: " + N1;
 
-        TMP_Text valueN2e3 = transform.GetChild(1).GetChild(2).GetComponent<TMP_Text>();
+        TMP_Text valueN2e3 = transform.GetChild(descriptionGameObjectIndex).GetChild(2).GetComponent<TMP_Text>();
         valueN2e3.text = "N2: " + N2 + " N3: " + N3;
 
-        TMP_Text description = transform.GetChild(1).GetChild(3).GetComponent<TMP_Text>();
+        TMP_Text description = transform.GetChild(descriptionGameObjectIndex).GetChild(3).GetComponent<TMP_Text>();
         description.text = Description;
 
-        transform.GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(descriptionGameObjectIndex).gameObject.SetActive(false);
 
-        transform.GetChild(0).gameObject.GetComponent<Button>().onClick.AddListener(SelectCard);
+        transform.GetChild(cardGameObjectIndex).gameObject.GetComponent<Button>().onClick.AddListener(SelectCard);
     }
 
     public void SelectCard()
@@ -64,40 +69,32 @@ public abstract class VariableCard : MonoBehaviour, IPointerEnterHandler, IPoint
         {
             CardController.instance.selectedCards.Remove(gameObject);
             LeanTween.moveY(rectTransform, originalPosition.y, 0.5f).setEase(LeanTweenType.easeOutSine);
-            transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = "";
+            transform.GetChild(positionGameObjectIndex).gameObject.GetComponent<TMP_Text>().text = "";
             foreach (GameObject card in CardController.instance.selectedCards)
             {
                 int index = CardController.instance.selectedCards.IndexOf(card);
-                card.transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = (index + 1).ToString();
+                card.transform.GetChild(positionGameObjectIndex).gameObject.GetComponent<TMP_Text>().text = (index + 1).ToString();
             }
         }
         else if (!CardController.instance.selectedCards.Contains(gameObject) 
-        && CardController.instance.selectedCards.Count < CardController.instance.maxCardsPlayable 
+        && CardController.instance.selectedCards.Count < CardController.maxCardsPlayable 
         && CardController.instance.handCards.Contains(gameObject))
         {
             CardController.instance.selectedCards.Add(gameObject);
             LeanTween.moveY(rectTransform, originalPosition.y + 50f, 0.5f).setEase(LeanTweenType.easeOutSine);
-            transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = CardController.instance.selectedCards.Count.ToString();
+            transform.GetChild(positionGameObjectIndex).gameObject.GetComponent<TMP_Text>().text = CardController.instance.selectedCards.Count.ToString();
         }
     }
 
     public void ShowDescription()
     {
-        if (isHovered && CardController.instance.handCards.Contains(gameObject))
+        if (isHovered && CardController.instance.handCards.Contains(gameObject) && canShowDescription)
         {
-            transform.GetChild(1).gameObject.SetActive(true);
-
+            transform.GetChild(descriptionGameObjectIndex).gameObject.SetActive(true);
         }
         else
         {
-            transform.GetChild(1).gameObject.SetActive(false);
-
+            transform.GetChild(descriptionGameObjectIndex).gameObject.SetActive(false);
         }
-    }
-
-    public void ODrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, 1000f*Vector3.one);
     }
 }
