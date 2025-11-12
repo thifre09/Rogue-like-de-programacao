@@ -7,10 +7,10 @@ public class CardController : MonoBehaviour
     public static int maxHandCards = 6;
     public static int maxCardsPlayable = 4;
     public List<GameObject> functionCards = new();
-    public List<GameObject> deckCards = new();
-    public List<GameObject> availableCards = new();
-    public List<GameObject> handCards = new();
-    public List<GameObject> selectedCards = new();
+    public List<GameObject> deckCards = new(); // All cards
+    public List<GameObject> availableCards = new(); //All cards that can be drawn
+    public List<GameObject> handCards = new(); // Cards in hand
+    public List<GameObject> selectedCards = new(); // Cards selected
 
     [Header("Referências de UI")]
     public GameObject cimaObj;

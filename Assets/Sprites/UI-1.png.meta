@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 408c3ed4079de094aa2b9d2d0729c275
+guid: c6563bc5135cd024396c8faf8397891d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -817450548856202898
-    second: description_0
+      213: -5192951156842421251
+    second: variableCard_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,12 +72,12 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
+    compressionQuality: 58
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: description_0
+      name: UI-1
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 64
-        height: 40
+        height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 2, z: 2, w: 2}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e695afd8e05d7a4f0800000000000000
-      internalID: -817450548856202898
+      spriteID: df32470bf6eeee7b0800000000000000
+      internalID: -5192951156842421251
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 49bad19dbf69f8e40bfa03ff15f5f3c3
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      description_0: -817450548856202898
+      UI-1: -5192951156842421251
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

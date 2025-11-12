@@ -12,8 +12,10 @@ public class PlayCards : MonoBehaviour
     private readonly List<Vector2> handCardsPosition = new();
     public void PlaySelectedCards()
     {
+        playedCardsOriginalPosition.Clear();
+        handCardsPosition.Clear();
         MatchController.attempts--;
-        for(int i = 0; i < CardController.instance.selectedCards.Count; i++)
+        for (int i = 0; i < CardController.instance.selectedCards.Count; i++)
         {
             GameObject card = CardController.instance.selectedCards[i];
             LeanTween.cancel(card, true);
@@ -83,7 +85,7 @@ public class PlayCards : MonoBehaviour
             Transform currentCard = playedCardsParent.transform.GetChild(i);
 
             // Delay baseado no índice da carta
-            float delay = 3 * 0.5f * i;
+            float delay = 3 * 0.45f * i;
 
             GameController.instance.Wait(delay, () =>
             {
@@ -108,23 +110,23 @@ public class PlayCards : MonoBehaviour
                     }
 
                     // --- Sequência de animações ---
-                    AnimateStep(new Color32(255, 40, 40, 255), variableCard.N1, () =>
+                    AnimateStep(new Color32(255, 40, 40, 255), variableCard.data.N1, () =>
                     {
-                        ScoreController.N1 += variableCard.N1;
+                        ScoreController.N1 += variableCard.data.N1;
                         ScoreController.UpdateN1();
 
                         GameController.instance.Wait(0.1f, () =>
                         {
-                            AnimateStep(new Color32(40, 255, 40, 255), variableCard.N2, () =>
+                            AnimateStep(new Color32(40, 255, 40, 255), variableCard.data.N2, () =>
                             {
-                                ScoreController.N2 += variableCard.N2;
+                                ScoreController.N2 += variableCard.data.N2;
                                 ScoreController.UpdateN2();
 
                                 GameController.instance.Wait(0.1f, () =>
                                 {
-                                    AnimateStep(new Color32(40, 40, 255, 255), variableCard.N3, () =>
+                                    AnimateStep(new Color32(40, 40, 255, 255), variableCard.data.N3, () =>
                                     {
-                                        ScoreController.N3 += variableCard.N3;
+                                        ScoreController.N3 += variableCard.data.N3;
                                         ScoreController.UpdateN3();
                                         ScoreController.UpdateTexts();
 
@@ -155,12 +157,12 @@ public class PlayCards : MonoBehaviour
                     LeanTween.scale(cardTransform.gameObject, Vector3.zero, 0.5f).setEaseInBack();
                     cardTransform.SetParent(CardController.instance.discartedCardsContainer.transform);
                 }
-                GameController.instance.Wait(0.8f,() =>
+                GameController.instance.Wait(0.8f, () =>
                 {
                     VerifyWin();
                 });
             });
-            
+
         });
     }
 
@@ -168,15 +170,23 @@ public class PlayCards : MonoBehaviour
     {
         ScoreController.N1 = 0;
         ScoreController.N2 = 1;
-        ScoreController.N2 = 1;
-        if (ScoreController.score >= MatchController.problemScoreNeeded)
+        ScoreController.N3 = 1;
+        ScoreController.UpdateTexts();
+        if (ScoreController.score >= MatchController.problemScoreNeeded) //Win
         {
-            Debug.Log("win");
+            GameController.instance.postRoundInformation.SetActive(true);
+            LeanTween.moveY(GameController.instance.postRoundInformation, GameController.instance.postRoundInformation.transform.position.y, 0.5f)
+            .setFrom(GameController.instance.postRoundInformation.transform.position.y)
+            .setEaseInBack();
         }
-        else
+        else //Not win
         {
             CardController.instance.DrawCard(CardController.maxHandCards - CardController.instance.handCards.Count);
             gameObject.GetComponent<Button>().interactable = true;
+            foreach (GameObject card in CardController.instance.handCards)
+            {
+                card.GetComponent<VariableCard>().canShowDescription = true;
+            }
         }
     }
 

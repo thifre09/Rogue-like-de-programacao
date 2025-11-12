@@ -9,6 +9,11 @@ public class GameController : MonoBehaviour
     public static float timeScale = 1f;
     public float time = 1f;
     public RandomSeed seed;
+    [Header("Referência da UI")]
+    public GameObject mainGame;
+    public GameObject store;
+    public GameObject startMenu;
+    public GameObject postRoundInformation;
     void Awake()
     {
         instance = this;
@@ -63,5 +68,18 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(seconds);
         action?.Invoke();
+    }
+
+    public void GoToStore()
+    {
+        
+        LeanTween.moveY(mainGame, -Screen.height - mainGame.GetComponent<RectTransform>().rect.height, 0.5f).setEaseInBack();
+        LeanTween.moveY(postRoundInformation, -Screen.height - postRoundInformation.GetComponent<RectTransform>().rect.height, 0.5f).setEaseInBack().setOnComplete(() =>
+        {    
+            store.SetActive(true);
+            LeanTween.moveY(store, store.transform.position.y, 1f).setFrom(-Screen.height - store.GetComponent<RectTransform>().rect.height).setEaseOutBack();
+            mainGame.SetActive(false);
+            postRoundInformation.SetActive(false);
+        });
     }
 }
