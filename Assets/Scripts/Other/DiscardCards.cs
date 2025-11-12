@@ -4,12 +4,12 @@ public class DiscardCards : MonoBehaviour
 {
     public void DiscardSelectedCards()
     {
-        for (int i = 0; i < CardController.instance.selectedCards.Count; i++)
+        foreach (VariableCardData cardData in CardController.instance.selectedCards.Keys)
         {
-            GameObject card = CardController.instance.selectedCards[i];
+            GameObject card = CardController.instance.selectedCards[cardData];
             LeanTween.cancel(card, true);
-            CardController.instance.availableCards.Remove(card);
-            CardController.instance.handCards.Remove(card);
+            CardController.instance.availableCards.Remove(cardData);
+            CardController.instance.handCards.Remove(cardData);
             LeanTween.scale(card, Vector3.zero, 0.5f).setEaseInBack().setOnComplete(() =>
             {
                 card.transform.SetParent(CardController.instance.discartedCardsContainer.transform);

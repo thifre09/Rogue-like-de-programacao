@@ -3,8 +3,8 @@ using UnityEngine;
 public class Prefabs : MonoBehaviour
 {
     [Header("Variables")]
+    public GameObject variableCard;
     public GameObject booleanVariableCard;
-    
     public GameObject floatVariableCard;
     public GameObject intVariableCard;
     public GameObject listVariableCard;

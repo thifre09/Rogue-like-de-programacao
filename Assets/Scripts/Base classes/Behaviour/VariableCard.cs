@@ -4,17 +4,20 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using NUnit.Framework;
+using System.Linq;
 
 public class VariableCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Dados da Carta")]
-    public VariableCardData data; // Referência ao ScriptableObject
+    public VariableCardData data; // Referência aos dados da carta
 
     private bool isHovered;
     private bool firstTime = true;
     private RectTransform rectTransform;
     public bool canShowDescription = true;
     public Vector2 originalPosition;
+
+    [Header("Index dos GameObjects Filhos")]
 
     public static int scoreGameObjectIndex = 0;
     public static int cardGameObjectIndex = 1;
@@ -159,33 +162,34 @@ public class VariableCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
         transform.GetChild(cardGameObjectIndex).GetComponent<Button>().onClick.AddListener(SelectCard);
     }
+    
     public void SelectCard()
     {
-        if (CardController.instance.selectedCards.Contains(gameObject))
-        {
-            CardController.instance.selectedCards.Remove(gameObject);
-            LeanTween.moveY(rectTransform, originalPosition.y, 0.5f).setEase(LeanTweenType.easeOutSine);
-            transform.GetChild(positionGameObjectIndex).GetComponent<TMP_Text>().text = "";
-            foreach (GameObject card in CardController.instance.selectedCards)
-            {
-                int index = CardController.instance.selectedCards.IndexOf(card);
-                card.transform.GetChild(positionGameObjectIndex).GetComponent<TMP_Text>().text = (index + 1).ToString();
-            }
-        }
-        else if (!CardController.instance.selectedCards.Contains(gameObject)
-            && CardController.instance.selectedCards.Count < CardController.maxCardsPlayable
-            && CardController.instance.handCards.Contains(gameObject))
-        {
-            CardController.instance.selectedCards.Add(gameObject);
-            LeanTween.moveY(rectTransform, originalPosition.y + 50f, 0.5f).setEase(LeanTweenType.easeOutSine);
-            transform.GetChild(positionGameObjectIndex).GetComponent<TMP_Text>().text = CardController.instance.selectedCards.Count.ToString();
-        }
+        // if (CardController.instance.selectedCards.ContainsKey(data))
+        // {
+        //     CardController.instance.selectedCards.Remove(data);
+        //     LeanTween.moveY(rectTransform, originalPosition.y, 0.5f).setEase(LeanTweenType.easeOutSine);
+        //     transform.GetChild(positionGameObjectIndex).GetComponent<TMP_Text>().text = "";
+        //     foreach (VariableCardData cardData in CardController.instance.selectedCards.Keys)
+        //     {
+        //         int index = CardController.instance.selectedCards.;
+        //         card.transform.GetChild(positionGameObjectIndex).GetComponent<TMP_Text>().text = (index + 1).ToString();
+        //     }
+        // }
+        // else if (!CardController.instance.selectedCards.Contains(data)
+        //     && CardController.instance.selectedCards.Count < CardController.maxCardsPlayable
+        //     && CardController.instance.handCards.Contains(data))
+        // {
+        //     CardController.instance.selectedCards.Add(gameObject);
+        //     LeanTween.moveY(rectTransform, originalPosition.y + 50f, 0.5f).setEase(LeanTweenType.easeOutSine);
+        //     transform.GetChild(positionGameObjectIndex).GetComponent<TMP_Text>().text = CardController.instance.selectedCards.Count.ToString();
+        // }
     }
 
     private void ShowDescription()
     {
-        bool shouldShow = isHovered && CardController.instance.handCards.Contains(gameObject) && canShowDescription;
-        transform.GetChild(descriptionGameObjectIndex).gameObject.SetActive(shouldShow);
+        // bool shouldShow = isHovered && CardController.instance.handCards.Contains(gameObject) && canShowDescription;
+        // transform.GetChild(descriptionGameObjectIndex).gameObject.SetActive(shouldShow);
     }
 }
 

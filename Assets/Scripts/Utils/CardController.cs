@@ -6,11 +6,10 @@ public class CardController : MonoBehaviour
     public static CardController instance;
     public static int maxHandCards = 6;
     public static int maxCardsPlayable = 4;
-    public List<GameObject> functionCards = new();
-    public List<GameObject> deckCards = new(); // All cards
-    public List<GameObject> availableCards = new(); //All cards that can be drawn
-    public List<GameObject> handCards = new(); // Cards in hand
-    public List<GameObject> selectedCards = new(); // Cards selected
+    public List<VariableCardData> deckCards = new(); // All cards
+    public List<VariableCardData> availableCards = new(); //All cards that can be drawn
+    public Dictionary<VariableCardData, GameObject> handCards = new(); // Cards in hand
+    public Dictionary<VariableCardData, GameObject> selectedCards = new(); // Cards selected
 
     [Header("Referências de UI")]
     public GameObject cimaObj;
@@ -27,32 +26,25 @@ public class CardController : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            GameObject boolCard = Instantiate(Prefabs.instance.booleanVariableCard, variableCardsContainer.transform);
-            GameObject floatCard = Instantiate(Prefabs.instance.floatVariableCard, variableCardsContainer.transform);
-            GameObject intCard = Instantiate(Prefabs.instance.intVariableCard, variableCardsContainer.transform);
-            GameObject listCard = Instantiate(Prefabs.instance.listVariableCard, variableCardsContainer.transform);
-            GameObject nullCard = Instantiate(Prefabs.instance.nullVariableCard, variableCardsContainer.transform);
-            GameObject stringCard = Instantiate(Prefabs.instance.stringVariableCard, variableCardsContainer.transform);
+            VariableCardData booleanCardData = new(CardType.Boolean);
+            VariableCardData floatCardData = new(CardType.Float);
+            VariableCardData integerCardData = new(CardType.Integer);
+            VariableCardData listCardData = new(CardType.List);
+            VariableCardData nullCardData = new(CardType.Null);
+            VariableCardData stringCardData = new(CardType.String);
 
-            boolCard.SetActive(false);
-            floatCard.SetActive(false);
-            intCard.SetActive(false);
-            listCard.SetActive(false);
-            nullCard.SetActive(false);
-            stringCard.SetActive(false);
-
-            deckCards.Add(boolCard);
-            deckCards.Add(floatCard);
-            deckCards.Add(intCard);
-            deckCards.Add(listCard);
-            deckCards.Add(nullCard);
-            deckCards.Add(stringCard);
-            availableCards.Add(boolCard);
-            availableCards.Add(floatCard);
-            availableCards.Add(intCard);
-            availableCards.Add(listCard);
-            availableCards.Add(nullCard);
-            availableCards.Add(stringCard);
+            deckCards.Add(booleanCardData);
+            deckCards.Add(floatCardData);
+            deckCards.Add(integerCardData);
+            deckCards.Add(listCardData);
+            deckCards.Add(nullCardData);
+            deckCards.Add(stringCardData);
+            availableCards.Add(booleanCardData);
+            availableCards.Add(floatCardData);
+            availableCards.Add(integerCardData);
+            availableCards.Add(listCardData);
+            availableCards.Add(nullCardData);
+            availableCards.Add(stringCardData);
         }
 
         DrawCard(maxHandCards);
@@ -62,14 +54,13 @@ public class CardController : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject chosenCard = availableCards[GameController.instance.seed.RandomInt(0, availableCards.Count - 1)];
-            while (handCards.Contains(chosenCard))
+            VariableCardData chosenCard = availableCards[GameController.instance.seed.RandomInt(0, availableCards.Count - 1)];
+            while (handCards.ContainsKey(chosenCard))
             {
                 chosenCard = availableCards[GameController.instance.seed.RandomInt(0, availableCards.Count - 1)];
             }
-            handCards.Add(chosenCard);
-            chosenCard.SetActive(true);
-            chosenCard.transform.SetParent(baixoObj.transform.GetChild(0).GetChild(0));
+            GameObject cardObj = Instantiate(Prefabs.instance.variableCard, baixoObj.transform.GetChild(0).GetChild(0));
+            handCards.Add(chosenCard, cardObj);
         }
     }
 }

@@ -5947,7 +5947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1901707042
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6572,11 +6572,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef43d7e1e6a4e324ba900981d5bd397a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  functionCards: []
-  deckCards: []
-  availableCards: []
-  handCards: []
-  selectedCards: []
   cimaObj: {fileID: 1507884442}
   centroObj: {fileID: 1468909684}
   baixoObj: {fileID: 1310602920}
@@ -6594,6 +6589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 588c71e80bf384142b60e33643aeda47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Prefabs
+  variableCard: {fileID: 0}
   booleanVariableCard: {fileID: 1416287205953158756, guid: b623424761da0dc4abb8b122fecff315, type: 3}
   floatVariableCard: {fileID: 7811189400390994685, guid: d7237515d07ab6a45b1605a31cf92f7f, type: 3}
   intVariableCard: {fileID: 3910254039802993845, guid: b3818eebeb4fbe342991b4a817b97eea, type: 3}

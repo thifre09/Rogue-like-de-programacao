@@ -7,7 +7,7 @@ public class VariableCardData
     public bool booleanValue;
     public float floatValue;
     public int integerValue;
-    public List<object> listValue;
+    public List<object> listValue = new();
     public string stringValue;
     public int N1;
     public int N2;
