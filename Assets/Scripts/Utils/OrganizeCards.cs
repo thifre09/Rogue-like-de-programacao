@@ -1,37 +1,88 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+[ExecuteAlways]
 public class OrganizeCards : MonoBehaviour
 {
     public static OrganizeCards instance;
+
     public bool canOrganize = true;
-    public float cardSize = 210f;
-    private HorizontalLayoutGroup HLG;
-    private RectTransform rectTransform;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    [Header("Layout")]
+    public float cardSize = 1.5f;
+    public float spacing = 0.2f;
+    public int maxCardsWithoutOverlap = 6;
+    public float smoothSpeed = 10f;
+
+    void Awake()
     {
         instance = this;
-        HLG = GetComponent<HorizontalLayoutGroup>();
-        rectTransform = GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (canOrganize)
             Organize();
     }
 
-    void Organize()
+    public List<Vector3> Organize()
     {
-        int childrenCount = rectTransform.childCount;
-        float spacing = cardSize * (1f / (childrenCount - 1) * (childrenCount - 5));
-        if (childrenCount == 1) spacing = 0;
-        if (HLG.transform.childCount < 5)
+        int cardCount = transform.childCount;
+        List<Vector3> positions = new(cardCount);
+        if (cardCount == 0) return positions;
+
+        float usedSpacing = spacing;
+
+        if (cardCount > maxCardsWithoutOverlap)
         {
-            spacing = (spacing * (HLG.transform.childCount - 1) * -1) - HLG.transform.childCount * 10;
+            float maxWidth = (maxCardsWithoutOverlap - 1) * (cardSize + spacing);
+            usedSpacing = (maxWidth / (cardCount - 1)) - cardSize;
         }
-        HLG.spacing = -spacing;
+
+        float totalWidth = (cardCount - 1) * (cardSize + usedSpacing);
+        float startX = -totalWidth / 2f;
+
+        for (int i = 0; i < cardCount; i++)
+        {
+            Transform card = transform.GetChild(i);
+            float targetX = startX + i * (cardSize + usedSpacing);
+            Vector3 pos = card.localPosition;
+            pos.x = Mathf.Lerp(pos.x, targetX, Time.deltaTime * smoothSpeed);
+            card.localPosition = pos;
+            positions.Add(card.localPosition);
+        }
+
+        return positions;
+    }
+
+    // Retorna as posições alvo para cada filho sem modificar seus transforms
+    public List<Vector3> GetTargetPositions()
+    {
+        int cardCount = transform.childCount;
+        List<Vector3> positions = new(cardCount);
+        if (cardCount == 0) return positions;
+
+        float usedSpacing = spacing;
+
+        if (cardCount > maxCardsWithoutOverlap)
+        {
+            float maxWidth = (maxCardsWithoutOverlap - 1) * (cardSize + spacing);
+            usedSpacing = (maxWidth / (cardCount - 1)) - cardSize;
+        }
+
+        float totalWidth = (cardCount - 1) * (cardSize + usedSpacing);
+        float startX = -totalWidth / 2f;
+
+        for (int i = 0; i < cardCount; i++)
+        {
+            Transform card = transform.GetChild(i);
+            float targetX = startX + i * (cardSize + usedSpacing);
+            Vector3 pos = card.localPosition;
+            pos.x = targetX;
+            pos.y = 0f;
+            positions.Add(pos);
+        }
+
+        return positions;
     }
 }

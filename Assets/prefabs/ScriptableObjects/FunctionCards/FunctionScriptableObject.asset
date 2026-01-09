@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f9789af10f47f4baaa370ba77ba593, type: 3}
+  m_Name: FunctionScriptableObject
+  m_EditorClassIdentifier: Assembly-CSharp::FunctionScriptableObject
+  functionName: {fileID: 0}
+  description: {fileID: 0}
+  sprite: {fileID: 0}
+  rarity: 0
+  useCustomScript: 0
+  maxActivations: 0
+  whenEffectIsApplied: 1
+  EvaluationMode: 0
+  conditions: []
+  effects:
+  - operationType: 0
+    VariableAffected: 2
+    useVariable: 0
+    valueVariable: 0
+    valueInt: 2

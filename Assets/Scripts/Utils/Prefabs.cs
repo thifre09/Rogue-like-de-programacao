@@ -1,17 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Prefabs : MonoBehaviour
 {
-    [Header("Variables")]
-    public GameObject variableCard;
-    public GameObject booleanVariableCard;
-    public GameObject floatVariableCard;
-    public GameObject intVariableCard;
-    public GameObject listVariableCard;
-    public GameObject nullVariableCard;
-    public GameObject stringVariableCard;
-    
     public static Prefabs instance;
+
+    [Header("Cards")]
+    public GameObject variableCard;
+    public GameObject functionCard;
     void Awake()
     {
         instance = this;

@@ -1,5 +1,3 @@
-using System;
-
 public class RandomSeed
 {
     private System.Random random;
@@ -13,7 +11,7 @@ public class RandomSeed
     // Retorna um número inteiro entre min (inclusive) e max (exclusivo)
     public int RandomInt(int min, int max)
     {
-        return random.Next(min, max + 1);
+        return random.Next(min, max);
     }
 
     // Retorna um número flutuante entre 0 e 1

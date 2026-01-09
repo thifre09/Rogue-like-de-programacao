@@ -66,12 +66,15 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "Rogue-like-de-programacao.sln",
+    "dotnet.defaultSolution": "Rogue-like-de-programacao.slnx",
     "cSpell.words": [
         "Behaviour",
+        "Condicao",
+        "condicoes",
         "Lerp",
         "Mathf",
         "Rebuilder",
+        "Scriptable",
         "Slerp"
     ]
 }

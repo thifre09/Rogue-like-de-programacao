@@ -3,38 +3,34 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class Card3DEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Card3DEffect : MonoBehaviour
 {
-    private bool isHovered;
+    public bool isHovered;
     Vector3 direction;
-    public void OnPointerEnter(PointerEventData eventData) => isHovered = true;
-    public void OnPointerExit(PointerEventData eventData) => isHovered = false;
+
     void Update()
     {
-
         if (isHovered)
         {
             Vector2 mousePos = Mouse.current.position.ReadValue();
-
-
-            Vector3 mousePos3D = new(mousePos.x, mousePos.y, 300f);
-
+            Vector2 MouseWorld = Camera.main.ScreenToWorldPoint(mousePos);
+            Vector3 mousePos3D = new(MouseWorld.x, MouseWorld.y, 2f);
             direction = (mousePos3D - transform.position).normalized;
-
             transform.rotation = Quaternion.LookRotation(new Vector3(-direction.x, -direction.y, direction.z), new Vector3(0f, 1f, 0f));
+
         }
         else
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * 5f);
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Time.timeScale = 0f;
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Time.timeScale = 1f;
-        }
+    public void OnMouseEnter()
+    {
+        isHovered = true;
+    }
+    public void OnMouseExit()
+    {
+        isHovered = false;
     }
 }
