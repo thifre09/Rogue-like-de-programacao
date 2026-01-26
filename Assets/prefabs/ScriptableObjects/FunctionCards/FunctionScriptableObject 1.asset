@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f9789af10f47f4baaa370ba77ba593, type: 3}
   m_Name: FunctionScriptableObject 1
   m_EditorClassIdentifier: Assembly-CSharp::FunctionScriptableObject
-  functionName: {fileID: 0}
-  description: {fileID: 0}
-  sprite: {fileID: 0}
+  functionTranslationName: 
+  descriptionTranslationName: 
+  sprite: {fileID: -6733563222699990255, guid: dbbcb6ae34d4f5747b3f75d05246820c, type: 3}
   rarity: 0
   useCustomScript: 0
   maxActivations: 0

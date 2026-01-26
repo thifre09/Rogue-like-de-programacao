@@ -8,18 +8,31 @@ public class PlayCards : MonoBehaviour
 {
     public void PlaySelectedCards()
     {
+        InitialSetup();
+        ExecuteFunctionCards(WhenEffectIsApplied.OnPlay, () =>
+        {
+            MoveCards(() =>
+            {
+                Score(() =>
+                {
+                    PosScoreSetup(() =>
+                    {
+                        VerifyWin();
+                    });
+                });
+            });
+        });       
+    }
+
+    void InitialSetup()
+    {
         transform.GetComponent<Button>().interactable = false;
         MatchController.attempts--;
         MatchController.instance.UpdateUI();
         GameController.instance.variableCardsOnPlay.GetComponent<OrganizeCards>().canOrganize = false;
         GameController.instance.playedCards.GetComponent<OrganizeCards>().canOrganize = false;
-        MoveCards(() =>
-        {
-            Score(() =>
-            {
-                PosScoreSetup();
-            });
-        });
+        foreach (Transform variableCard in GameController.instance.variableCardsOnPlay.transform)
+            variableCard.GetComponent<VariableCard>().canShowDescription = false;
     }
 
     void MoveCards(Action onComplete = null)
@@ -51,8 +64,9 @@ public class PlayCards : MonoBehaviour
     {
         void AnimateScoreText(GameObject card, ColorType colorType, Action onComplete)
         {
-            GameObject text = card.transform.GetChild(0).GetChild(VariableCard.scoreTextIndex).gameObject;          
-            GameController.instance.Wait(0.1f, () => {
+            GameObject text = card.transform.GetChild(0).GetChild(VariableCard.scoreTextIndex).gameObject;
+            GameController.instance.Wait(0.1f, () =>
+            {
                 Vector3 pos = text.transform.localPosition;
                 text.transform.localPosition = new Vector3(pos.x, 0, pos.z);
 
@@ -66,9 +80,10 @@ public class PlayCards : MonoBehaviour
                     text.GetComponent<TMP_Text>().text = card.GetComponent<VariableCard>().data.N3.ToString();
 
                 LeanTween.moveLocalY(text, pos.y, 0.4f)
-                .setEaseOutCubic().setOnComplete(() => {
+                .setEaseOutCubic().setOnComplete(() =>
+                {
                     if (colorType == ColorType.Red)
-                        ScoreController.N1+= card.GetComponent<VariableCard>().data.N1;
+                        ScoreController.N1 += card.GetComponent<VariableCard>().data.N1;
                     else if (colorType == ColorType.Green)
                         ScoreController.N2 += card.GetComponent<VariableCard>().data.N2;
                     else if (colorType == ColorType.Blue)
@@ -77,7 +92,7 @@ public class PlayCards : MonoBehaviour
                     ScoreController.UpdateTexts();
                     onComplete?.Invoke();
                 });
-            });    
+            });
         }
 
         int completed = 0;
@@ -104,7 +119,7 @@ public class PlayCards : MonoBehaviour
                                 GameController.instance.Wait(0.5f, () =>
                                 {
                                     onComplete?.Invoke();
-                                });                               
+                                });
                             }
                         });
                     });
@@ -129,13 +144,19 @@ public class PlayCards : MonoBehaviour
                 {
                     CardController.instance.InstantiateVariableCard(GameController.instance.variableCardsOnPlay, CardController.instance.selectedCards.Count);
                     CardController.instance.selectedCards.Clear();
+
                     GameController.instance.variableCardsOnPlay.GetComponent<OrganizeCards>().canOrganize = true;
                     GameController.instance.playedCards.GetComponent<OrganizeCards>().canOrganize = true;
+
                     transform.GetComponent<Button>().interactable = true;
                     ScoreController.ResetScores();
+
+                    foreach (Transform variableCard in GameController.instance.variableCardsOnPlay.transform)
+                        variableCard.GetComponent<VariableCard>().canShowDescription = true;
+
                     onComplete?.Invoke();
                 }
-            });     
+            });
         }
     }
 
@@ -149,9 +170,38 @@ public class PlayCards : MonoBehaviour
         {
             Debug.Log("You lose!");
         }
-        else 
+        else
         {
             Debug.Log("Continue playing!");
+        }
+    }
+
+    void ExecuteFunctionCards(WhenEffectIsApplied whenEffectIsApplied, Action onComplete = null)
+    {
+        List<GameObject> functionCardsToExecute = new();
+        foreach (Transform functionCard in GameController.instance.functionCardsOnPlay.transform)
+        {
+            if (functionCard.GetComponent<FunctionCard>().data.whenEffectIsApplied == whenEffectIsApplied)
+            {
+                functionCardsToExecute.Add(functionCard.gameObject);
+            }
+        }
+
+        for (int i = 0; i < functionCardsToExecute.Count; i++)
+        {
+            int index = i;
+            GameObject functionCard = functionCardsToExecute[index];
+            LeanTween.scale(functionCard, functionCard.transform.localScale * 1.2f, 0.3f).setEaseInBack()
+            .setDelay(index * 0.7f).setOnComplete(() =>
+            {
+                functionCard.GetComponent<FunctionCard>().ExecuteFunction();
+                LeanTween.scale(functionCard, functionCard.transform.localScale / 1.2f, 0.3f).setDelay(0.3f)
+                .setEaseInBack().setOnComplete(() =>
+                {
+                    if (index >= functionCardsToExecute.Count - 1)
+                        onComplete?.Invoke();
+                });
+            });
         }
     }
 }

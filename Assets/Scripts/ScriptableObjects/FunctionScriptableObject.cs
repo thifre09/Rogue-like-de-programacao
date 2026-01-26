@@ -6,12 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FunctionScriptableObject", menuName = "Scriptable Objects/FunctionScriptableObject")]
 public class FunctionScriptableObject : ScriptableObject
 {
-    public GameObject functionName;
-    public GameObject description;
+    public string functionTranslationName;
+    public string descriptionTranslationName;
     public Sprite sprite;
     public Rarity rarity;
     public bool useCustomScript;
-    [HideIf("useCustomScript")] public int maxActivations = 0; //0 means infinite
+    [HideIf("useCustomScript")] public int maxActivations = 0; // 0 means infinite
     [HideIf("useCustomScript")] public WhenEffectIsApplied whenEffectIsApplied;
     [HideIf(EConditionOperator.Or, "useCustomScript", nameof(hasLessThanOneCondition))] public EvaluationMode EvaluationMode;
     [HideIf("useCustomScript")][OnValueChanged(nameof(HasLessThan))] public List<CondicaoF> conditions;

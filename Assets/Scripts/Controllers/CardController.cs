@@ -11,7 +11,6 @@ public class CardController : MonoBehaviour
     public List<VariableCardData> availableCards = new(); //All cards that can be drawn
     public OrderedDictionary selectedCards = new(); // Cards selected
     public List<FunctionScriptableObject> functionCards = new(); // Function cards
-    public Dictionary<FunctionScriptableObject, GameObject> functionCardsInPlay = new(); // Function cards in play
     
     void Awake()
     {
@@ -44,6 +43,7 @@ public class CardController : MonoBehaviour
         }
 
         InstantiateVariableCard(GameController.instance.variableCardsOnPlay, maxHandCards);
+        GameController.instance.functionCardsOnPlay.transform.GetChild(0).GetComponent<FunctionCard>().data = functionCards[1];
     }
 
     public void InstantiateVariableCard(GameObject parent, int amount = 1)
@@ -57,8 +57,10 @@ public class CardController : MonoBehaviour
         }
     }
 
-    public void InstantiateFunctionCard(FunctionScriptableObject functionScriptableObject)
+    public void InstantiateFunctionCard(GameObject parent)
     {
-        
+        FunctionScriptableObject functionScriptableObject = functionCards[GameController.instance.seed.RandomInt(0, functionCards.Count)];
+        GameObject cardPrefab = Instantiate(Prefabs.instance.functionCard, parent.transform);
+        cardPrefab.GetComponent<FunctionCard>().data = functionScriptableObject;
     }
 }

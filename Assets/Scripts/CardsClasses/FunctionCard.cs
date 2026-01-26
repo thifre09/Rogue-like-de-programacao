@@ -1,13 +1,17 @@
+using Lean.Localization;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class FunctionCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class FunctionCard : MonoBehaviour
 {
     public FunctionScriptableObject data;
+    public static int cardSpriteIndex = 0;
+    public static int descriptionGameObjectIndex = 1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        ChangeInformation();
     }
 
     // Update is called once per frame
@@ -16,15 +20,16 @@ public class FunctionCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnMouseEnter()
     {
-        transform.GetChild(1).gameObject.SetActive(true);
+        GetCanvas().GetChild(descriptionGameObjectIndex).gameObject.SetActive(true);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnMouseExit()
     {
-        transform.GetChild(1).gameObject.SetActive(false);
+        GetCanvas().GetChild(descriptionGameObjectIndex).gameObject.SetActive(false);
     }
+
 
     public int ReturnVariable(UsefulVariables usefulVariable)
     {
@@ -517,5 +522,26 @@ public class FunctionCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             }           
         }
         MatchController.instance.UpdateUI();
+    }
+
+    public void ExecuteFunction()
+    {
+        if (VerifyConditions())
+        {
+            ApplyEffects();
+            MatchController.instance.UpdateUI();
+        }
+    }
+    
+    private void ChangeInformation()
+    {
+
+        //GetCanvas().GetChild(cardSpriteIndex).GetChild(0).GetComponent<Image>().sprite = data.sprite;    
+        GetCanvas().GetChild(descriptionGameObjectIndex).GetChild(0).GetChild(0).GetComponent<LeanLocalizedTextMeshProUGUI>().TranslationName = data.functionTranslationName;
+        GetCanvas().GetChild(descriptionGameObjectIndex).GetChild(1).GetComponent<LeanLocalizedTextMeshProUGUI>().TranslationName = data.descriptionTranslationName;
+    }
+    private Transform GetCanvas()
+    {
+        return transform.GetChild(0);
     }
 }

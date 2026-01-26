@@ -7,6 +7,7 @@ public class OrganizeCards : MonoBehaviour
     public static OrganizeCards instance;
 
     public bool canOrganize = true;
+    public bool canOrganizeY = true;
 
     [Header("Layout")]
     public float cardSize = 1.5f;
@@ -48,6 +49,11 @@ public class OrganizeCards : MonoBehaviour
             float targetX = startX + i * (cardSize + usedSpacing);
             Vector3 pos = card.localPosition;
             pos.x = Mathf.Lerp(pos.x, targetX, Time.deltaTime * smoothSpeed);
+            if (canOrganizeY)
+            {
+                pos.y = 0f;
+                canOrganizeY = false;
+            }
             card.localPosition = pos;
             positions.Add(card.localPosition);
         }

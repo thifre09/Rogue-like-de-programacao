@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Linq;
+using Lean.Localization;
 
 public class VariableCard : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class VariableCard : MonoBehaviour
     public VariableCardData data; // Referência aos dados da carta
 
     public bool canShowDescription = true;
-    public Vector2 originalPosition;
 
     [Header("Index dos GameObjects Filhos")]
     public static int scoreTextIndex = 0;
@@ -44,7 +44,6 @@ public class VariableCard : MonoBehaviour
 
     public void SelectCard()
     {
-        
         if (CardController.instance.selectedCards.Contains(data))
         {
             LeanTween.cancel(gameObject);
@@ -70,7 +69,7 @@ public class VariableCard : MonoBehaviour
         }
     }
     
-    public void ChangeInformation()
+    private void ChangeInformation()
     {
         GetCanvas().GetChild(cardSpiteIndex).GetComponent<Image>().color = data.color;
         TMP_Text cardText = transform.GetChild(0).GetChild(cardSpiteIndex).GetChild(0).GetComponentInChildren<TMP_Text>();
@@ -98,7 +97,7 @@ public class VariableCard : MonoBehaviour
 
         GetCanvas().GetChild(descriptionGameObjectIndex).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = data.cardType.ToString();
         GetCanvas().GetChild(descriptionGameObjectIndex).GetChild(1).GetComponent<TMP_Text>().text = data.N1.ToString();
-        GetCanvas().GetChild(descriptionGameObjectIndex).GetChild(2).GetComponent<TMP_Text>().text = data.description;
+        GetCanvas().GetChild(descriptionGameObjectIndex).GetChild(2).GetComponent<LeanLocalizedTextMeshProUGUI>().TranslationName = data.descriptionTranslationName;
     }
 
     private Transform GetCanvas()

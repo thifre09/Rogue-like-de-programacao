@@ -4,7 +4,7 @@ using UnityEngine;
 public class VariableCardData
 {
     public CardType cardType;
-    public string description;
+    public string descriptionTranslationName;
     public bool booleanValue;
     public float floatValue;
     public int integerValue;
@@ -25,7 +25,7 @@ public class VariableCardData
     {
         void StartBoolean()
         {
-            description = "A boolean variable that can hold true or false.";
+            descriptionTranslationName = "description/variable/boolean";
             booleanValue = GameController.instance.seed.RandomInt(0, 1) == 1;
             N1 = 10;
             N2 = booleanValue ? 0 : 1;
@@ -33,7 +33,7 @@ public class VariableCardData
         }
         void StartFloat()
         {
-            description = "A float variable that can hold a decimal value.";
+            descriptionTranslationName = "description/variable/float";
             floatValue = GameController.instance.seed.RandomInt(1, 9);
             N1 = (int)Mathf.Ceil(floatValue);
             N2 = 1;
@@ -41,7 +41,7 @@ public class VariableCardData
         }
         void StartInteger()
         {
-            description = "An integer variable that can hold a whole number.";
+            descriptionTranslationName = "description/variable/integer";
             integerValue = GameController.instance.seed.RandomInt(1, 9);
             N1 = integerValue;
             N2 = 0;
@@ -49,7 +49,7 @@ public class VariableCardData
         }
         void StartList()
         {
-            description = "A list variable that can hold multiple values.";
+            descriptionTranslationName = "description/variable/list";
             int a = GameController.instance.seed.RandomInt(1, 9);
             for (int i = 0; i < a; i++)
             {
@@ -70,7 +70,7 @@ public class VariableCardData
                     {
                         strValue += (char)GameController.instance.seed.RandomInt(97, 123);
                     }
-                    listValue.Add(strValue); // string
+                    listValue.Add(strValue);
                 }
             }
             N1 = listValue.Count;
@@ -79,14 +79,14 @@ public class VariableCardData
         }
         void StartNull()
         {
-            description = "A null variable that represents the absence of a value.";
+            descriptionTranslationName = "description/variable/null";
             N1 = 15;
             N2 = 1;
             N3 = 1;
         }
         void StartString()
         {
-            description = "A string variable that can hold text.";
+            descriptionTranslationName = "description/variable/null";
             int a = GameController.instance.seed.RandomInt(1, 9);
             for (int i = 0; i < a; i++)
             {
